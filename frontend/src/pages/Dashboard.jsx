@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import api from "../services/api";
 
 const Dashboard = () => {
   const [employees, setEmployees] = useState([]);
@@ -16,27 +17,22 @@ const Dashboard = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [employeeId, setEmployeeId] = useState(null);
 
-  const fetchEmployees = async () => {
+const fetchEmployees = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/api/employees");
+    const res = await api.get("/employees");
+
     setEmployees(res.data.employees);
   } catch (err) {
     console.log(err);
   }
 };
 
-useEffect(() => {
-  fetchEmployees();
-}, []);
-
 const addEmployee = async () => {
   try {
-    await axios.post(
-      "http://localhost:5000/api/employees",
-      formData
-    );
+    await api.post("/employees/add", formData);
 
     fetchEmployees();
+
     setShowModal(false);
 
     setFormData({
@@ -53,14 +49,11 @@ const addEmployee = async () => {
 
 const updateEmployee = async () => {
   try {
-    await axios.put(
-      `http://localhost:5000/api/employees/${employeeId}`,
-      formData
-    );
+    await api.put(`/employees/${employeeId}`, formData);
 
     fetchEmployees();
-    setShowModal(false);
 
+    setShowModal(false);
     setIsEdit(false);
 
     setFormData({
@@ -77,9 +70,7 @@ const updateEmployee = async () => {
 
 const deleteEmployee = async (id) => {
   try {
-    await axios.delete(
-      `http://localhost:5000/api/employees/${id}`
-    );
+    await api.delete(`/employees/${id}`);
 
     fetchEmployees();
   } catch (err) {
@@ -97,10 +88,22 @@ const deleteEmployee = async (id) => {
       </h1>
 
       <button
-        className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-semibold transition"
-      >
-        + Add Employee
-      </button>
+  onClick={() => {
+    setShowModal(true);
+    setIsEdit(false);
+
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      designation: "",
+      salary: "",
+    });
+  }}
+  className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-semibold transition"
+>
+  + Add Employee
+</button>
     </div>
 
     {/* Employee Cards */}
@@ -139,19 +142,18 @@ const deleteEmployee = async (id) => {
           <div className="mt-6 flex flex-col gap-3">
             <button
               onClick={() => {
-                setEmployeeId(employee._id);
-                setIsEdit(true);
+  setEmployeeId(employee._id);
+  setIsEdit(true);
+  setShowModal(true);
 
-                setFormData({
-                  name: employee.name,
-                  email: employee.email,
-                  phone: employee.phone,
-                  designation: employee.designation,
-                  salary: employee.salary,
-                });
-
-                console.log("Selected Employee:", employee);
-              }}
+  setFormData({
+    name: employee.name,
+    email: employee.email,
+    phone: employee.phone,
+    designation: employee.designation,
+    salary: employee.salary,
+  });
+}}
               className="w-full rounded-lg bg-blue-600 py-2 text-white font-semibold hover:bg-blue-700 transition"
             >
               Update
