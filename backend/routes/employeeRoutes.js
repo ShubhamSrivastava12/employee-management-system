@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/", getEmployees);
 
-router.post("/", addEmployee);
+router.post("/add", addEmployee);
 
 router.put("/:id", updateEmployee);
 
