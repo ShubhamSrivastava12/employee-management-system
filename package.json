@@ -1,0 +1,16 @@
+{
+  "name": "employee-management-system",
+  "private": true,
+  "scripts": {
+    "client": "npm --prefix frontend run dev",
+    "server": "nodemon backend/server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.4",
+    "nodemon": "^3.1.14"
+  },
+  "dependencies": {
+    "axios": "^1.19.0"
+  }
+}
