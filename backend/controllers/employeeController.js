@@ -1,3 +1,5 @@
+import Employee from "../models/employeeModel.js";
+
 export const getEmployees = async (req, res) => {
   try {
     const employees = await Employee.find();
